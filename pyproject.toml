@@ -9,7 +9,7 @@ authors = [{ "name" = "Vito Gamberini", "email" = "vito@gamberini.email" }]
 keywords = ["WSGI"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
-  "CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
+  "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.13",
   "Operating System :: POSIX :: Linux",
