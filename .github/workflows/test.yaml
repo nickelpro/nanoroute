@@ -1,0 +1,88 @@
+name: Build and Test
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  build_windows:
+    name: Build and Test on Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Build
+        run: |
+          python -m venv .venv
+          .venv\Scripts\Activate.ps1
+          pip install .
+
+      - name: Test
+        run: |
+          .venv\Scripts\Activate.ps1
+          pip install pytest
+          pytest test
+
+  build_macos:
+    name: Build and Test on MacOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Xcode Switch
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Build
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install --upgrade pip
+          pip install .
+
+      - name: Test
+        run: |
+          . .venv/bin/activate
+          pip install pytest
+          pytest test
+
+  build_linux:
+    name: Build and Test on Linux
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Build
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install --upgrade pip
+          pip install .
+
+      - name: Test
+        run: |
+          . .venv/bin/activate
+          pip install pytest
+          pytest test

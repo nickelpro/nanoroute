@@ -1,0 +1,54 @@
+#ifndef HTTP_METHOD
+#define HTTP_METHOD(code, name, sym)
+#endif
+
+HTTP_METHOD(0,  DELETE,        Delete)        \
+HTTP_METHOD(1,  GET,           Get)           \
+HTTP_METHOD(2,  HEAD,          Head)          \
+HTTP_METHOD(3,  POST,          Post)          \
+HTTP_METHOD(4,  PUT,           Put)           \
+HTTP_METHOD(5,  CONNECT,       Connect)       \
+HTTP_METHOD(6,  OPTIONS,       Options)       \
+HTTP_METHOD(7,  TRACE,         Trace)         \
+HTTP_METHOD(8,  COPY,          Copy)          \
+HTTP_METHOD(9,  LOCK,          Lock)          \
+HTTP_METHOD(10, MKCOL,         MkCol)         \
+HTTP_METHOD(11, MOVE,          Move)          \
+HTTP_METHOD(12, PROPFIND,      PropFind)      \
+HTTP_METHOD(13, PROPPATCH,     PropPatch)     \
+HTTP_METHOD(14, SEARCH,        Search)        \
+HTTP_METHOD(15, UNLOCK,        Unlock)        \
+HTTP_METHOD(16, BIND,          Bind)          \
+HTTP_METHOD(17, REBIND,        Rebind)        \
+HTTP_METHOD(18, UNBIND,        Unbind)        \
+HTTP_METHOD(19, ACL,           ACL)           \
+HTTP_METHOD(20, REPORT,        Report)        \
+HTTP_METHOD(21, MKACTIVITY,    MkActivity)    \
+HTTP_METHOD(22, CHECKOUT,      Checkout)      \
+HTTP_METHOD(23, MERGE,         Merge)         \
+HTTP_METHOD(24, M-SEARCH,      MSearch)       \
+HTTP_METHOD(25, NOTIFY,        Notify)        \
+HTTP_METHOD(26, SUBSCRIBE,     Subscribe)     \
+HTTP_METHOD(27, UNSUBSCRIBE,   Unsubscribe)   \
+HTTP_METHOD(28, PATCH,         Patch)         \
+HTTP_METHOD(29, PURGE,         Purge)         \
+HTTP_METHOD(30, MKCALENDAR,    MkCalendar)    \
+HTTP_METHOD(31, LINK,          Link)          \
+HTTP_METHOD(32, UNLINK,        Unlink)        \
+HTTP_METHOD(33, SOURCE,        Source)        \
+HTTP_METHOD(34, PRI,           Pri)           \
+HTTP_METHOD(35, DESCRIBE,      Describe)      \
+HTTP_METHOD(36, ANNOUNCE,      Announce)      \
+HTTP_METHOD(37, SETUP,         Setup)         \
+HTTP_METHOD(38, PLAY,          Play)          \
+HTTP_METHOD(39, PAUSE,         Pause)         \
+HTTP_METHOD(40, TEARDOWN,      Teardown)      \
+HTTP_METHOD(41, GET_PARAMETER, Get_Parameter) \
+HTTP_METHOD(42, SET_PARAMETER, Set_Parameter) \
+HTTP_METHOD(43, REDIRECT,      Redirect)      \
+HTTP_METHOD(44, RECORD,        Record)        \
+HTTP_METHOD(45, FLUSH,         Flush)         \
+HTTP_METHOD(46, QUERY,         Query)         \
+
+
+#undef HTTP_METHOD

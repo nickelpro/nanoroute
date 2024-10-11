@@ -1,0 +1,28 @@
+{
+  "name": "nanoroute",
+  "version": "1.0.0",
+  "description": "Small, fast, HTTP URL router",
+  "homepage": "https://github.com/nickelpro/nanoroute",
+  "maintainers": [
+    "Vito Gamberini <vito@gamberini.email>"
+  ],
+  "license": "CC0-1.0",
+  "dependencies": [
+    {
+      "name": "abseil",
+      "features": [
+        "cxx17"
+      ]
+    }
+  ],
+  "vcpkg-configuration": {
+    "default-registry": {
+      "kind": "git",
+      "baseline": "5a3e638f449206ac10f82f2171a21333004d7306",
+      "repository": "https://github.com/microsoft/vcpkg.git"
+    },
+    "overlay-triplets": [
+      "./vcpkg/triplets"
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+[project]
+name = "nanoroute"
+version = "1.0.0"
+description = "Small, fast, HTTP URL router"
+readme = "ReadMe.md"
+requires-python = ">=3.13"
+license = { "file" = "License" }
+authors = [{ "name" = "Vito Gamberini", "email" = "vito@gamberini.email" }]
+keywords = ["WSGI"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.13",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: MacOS",
+]
+urls = { "Documentation" = "https://github.com/nickelpro/nanoroute" }
+dependencies = []
+
+[build-system]
+requires = ["py-build-cmake~=0.2.0a14"]
+build-backend = "py_build_cmake.build"
+
+[tool.py-build-cmake.module]
+generated = "module"
+
+[tool.py-build-cmake.sdist]
+include = ["CMakeLists.txt", "vcpkg.json", "src", "vcpkg"]
+
+[tool.py-build-cmake.cmake]
+minimum_version = "3.25"
+config = "Release"
+build_type = "Release"
+build_args = ["-j"]
+
+[tool.py-build-cmake.linux.cmake.options]
+"VCPKG_TARGET_TRIPLET:STRING" = "x64-linux-release-lto"
+
+[tool.py-build-cmake.mac.cmake.options]
+"VCPKG_TARGET_TRIPLET:STRING" = "arm64-macos-release-lto"
+"VCPKG_OSX_DEPLOYMENT_TARGET:STRING" = "13.3"
+"CMAKE_OSX_DEPLOYMENT_TARGET:STRING" = "13.3"
+
+[tool.py-build-cmake.windows.cmake.options]
+"VCPKG_TARGET_TRIPLET:STRING" = "x64-windows-release-lto"
+"CMAKE_MSVC_RUNTIME_LIBRARY:STRING" = "MultiThreaded"
