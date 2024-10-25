@@ -1,0 +1,66 @@
+%{
+#include "Util.hpp"
+
+namespace nanoroute {
+%}
+%struct-type
+%language=C++
+%define class-name HTTPPerfectHash
+%7bit
+%compare-lengths
+%compare-strncmp
+%readonly-tables
+%enum
+%includes
+%global-table
+struct PerfectHashResult {const char* name; HTTPMethod meth;};
+%%
+DELETE,        HTTPMethod::Delete
+GET,           HTTPMethod::Get
+HEAD,          HTTPMethod::Head
+POST,          HTTPMethod::Post
+PUT,           HTTPMethod::Put
+CONNECT,       HTTPMethod::Connect
+OPTIONS,       HTTPMethod::Options
+TRACE,         HTTPMethod::Trace
+COPY,          HTTPMethod::Copy
+LOCK,          HTTPMethod::Lock
+MKCOL,         HTTPMethod::MkCol
+MOVE,          HTTPMethod::Move
+PROPFIND,      HTTPMethod::PropFind
+PROPPATCH,     HTTPMethod::PropPatch
+SEARCH,        HTTPMethod::Search
+UNLOCK,        HTTPMethod::Unlock
+BIND,          HTTPMethod::Bind
+REBIND,        HTTPMethod::Rebind
+UNBIND,        HTTPMethod::Unbind
+ACL,           HTTPMethod::ACL
+REPORT,        HTTPMethod::Report
+MKACTIVITY,    HTTPMethod::MkActivity
+CHECKOUT,      HTTPMethod::Checkout
+MERGE,         HTTPMethod::Merge
+M-SEARCH,      HTTPMethod::MSearch
+NOTIFY,        HTTPMethod::Notify
+SUBSCRIBE,     HTTPMethod::Subscribe
+UNSUBSCRIBE,   HTTPMethod::Unsubscribe
+PATCH,         HTTPMethod::Patch
+PURGE,         HTTPMethod::Purge
+MKCALENDAR,    HTTPMethod::MkCalendar
+LINK,          HTTPMethod::Link
+UNLINK,        HTTPMethod::Unlink
+SOURCE,        HTTPMethod::Source
+PRI,           HTTPMethod::Pri
+DESCRIBE,      HTTPMethod::Describe
+ANNOUNCE,      HTTPMethod::Announce
+SETUP,         HTTPMethod::Setup
+PLAY,          HTTPMethod::Play
+PAUSE,         HTTPMethod::Pause
+TEARDOWN,      HTTPMethod::Teardown
+GET_PARAMETER, HTTPMethod::Get_Parameter
+SET_PARAMETER, HTTPMethod::Set_Parameter
+REDIRECT,      HTTPMethod::Redirect
+RECORD,        HTTPMethod::Record
+FLUSH,         HTTPMethod::Flush
+QUERY,         HTTPMethod::Query
+%%
+}

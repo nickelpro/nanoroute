@@ -30,7 +30,7 @@ struct PyRouter : PyObject {
   static PyObject* wsgi_app(PyRouter* self, PyObject* const* args,
       Py_ssize_t nargs);
 
-  static PyObject* register_routes(PyObject* self, PyObject* const* args,
+  static PyObject* register_route(PyObject* self, PyObject* const* args,
       Py_ssize_t nargs);
 
   static PyRouter* new_(PyTypeObject* subtype, PyObject* /*args*/,

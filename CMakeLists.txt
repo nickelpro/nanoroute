@@ -1,18 +1,14 @@
 cmake_minimum_required(VERSION 3.25)
 
-include(vcpkg/BootstrapVcpkg.cmake)
-
-project(nanoroute LANGUAGES CXX VERSION 1.0.0)
+project(nanoroute LANGUAGES CXX VERSION 2.0.0)
 
 option(NANOROUTE_USE_IPO "Use interprocedural optimization if supported" ON)
 option(NANOROUTE_STRIP "Run system strip on compiled module" ON)
 
-find_package(absl CONFIG REQUIRED)
 find_package(Python3 3.13 REQUIRED COMPONENTS Development.Module)
 
 Python3_add_library(nanoroute MODULE)
 target_link_libraries(nanoroute PRIVATE
-  absl::flat_hash_map
   Python3::Module
 )
 target_compile_features(nanoroute PRIVATE cxx_std_23)
@@ -64,4 +60,9 @@ add_subdirectory(src)
 install(
   TARGETS nanoroute
   LIBRARY DESTINATION ${PY_BUILD_CMAKE_PACKAGE_NAME}-${PY_BUILD_CMAKE_PACKAGE_VERSION}.data/platlib
+)
+
+install(
+  FILES src/nanoroute.pyi
+  DESTINATION ${PY_BUILD_CMAKE_PACKAGE_NAME}-${PY_BUILD_CMAKE_PACKAGE_VERSION}.data/purelib
 )

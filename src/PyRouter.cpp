@@ -11,6 +11,7 @@
 #include <internal/pycore_capsule.h>
 #include <internal/pycore_modsupport.h>
 
+#include "HTTPPerfectHash.hpp"
 #include "HTTPRouter.hpp"
 #include "ModNanoroute.hpp"
 #include "Util.hpp"
@@ -118,7 +119,7 @@ template <std::size_t N> void type_error(const char (&str)[N], PyObject* obj) {
 }
 } // namespace
 
-PyObject* PyRouter::register_routes(PyObject* self, PyObject* const* args,
+PyObject* PyRouter::register_route(PyObject* self, PyObject* const* args,
     Py_ssize_t nargs) {
   PyObject* pyo;
   if(!_PyArg_ParseStack(args, nargs, "O:register_route", &pyo))
@@ -191,12 +192,12 @@ PyObject* PyRouter::route(PyRouter* self, PyObject* const* args,
     const char* c {PyUnicode_AsUTF8AndSize(meths, &sz)};
     if(!c)
       return nullptr;
-    auto meth {str2meth({c, static_cast<std::size_t>(sz)})};
-    if(meth == HTTPMethod::INVALID) {
+    auto hash {HTTPPerfectHash::in_word_set(c, static_cast<std::size_t>(sz))};
+    if(hash == nullptr) {
       PyErr_Format(PyExc_TypeError, "%U is not a valid HTTP method", meths);
       return nullptr;
     }
-    return self->route_(meth, route_def);
+    return self->route_(hash->meth, route_def);
   }
 
   std::vector<HTTPMethod> vec;
@@ -218,14 +219,14 @@ PyObject* PyRouter::route(PyRouter* self, PyObject* const* args,
     if(!c)
       return nullptr;
 
-    auto meth {str2meth({c, static_cast<std::size_t>(sz)})};
-    if(meth == HTTPMethod::INVALID) {
+    auto hash {HTTPPerfectHash::in_word_set(c, static_cast<std::size_t>(sz))};
+    if(hash == nullptr) {
       PyErr_Format(PyExc_TypeError, "%U is not a valid HTTP method", next);
       Py_DECREF(next);
       return nullptr;
     }
 
-    vec.push_back(meth);
+    vec.push_back(hash->meth);
   }
 
   return self->route_(std::move(vec), route_def);
@@ -233,12 +234,21 @@ PyObject* PyRouter::route(PyRouter* self, PyObject* const* args,
 
 namespace {
 PyObject* make_cap_dict(
-    const std::vector<std::pair<std::string_view, std::string_view>>& caps) {
-  auto dict {_PyDict_NewPresized(caps.size())};
+    std::pair<std::vector<std::string>*, std::vector<std::string_view>*>&
+        caps) {
+  auto& [keys, vals] = caps;
+  auto dict {_PyDict_NewPresized(keys->size())};
   if(!dict)
     return nullptr;
 
-  for(auto& [key, val] : caps) {
+  std::size_t i {0};
+  for(auto& key : *keys) {
+    if(key.empty()) {
+      ++i;
+      continue;
+    }
+    auto& val {(*vals)[i++]};
+
     PyObject* k {PyUnicode_FromStringAndSize(key.data(), key.size())};
     if(!k) {
       Py_DECREF(dict);
@@ -274,8 +284,8 @@ PyObject* PyRouter::lookup(PyRouter* self, PyObject* const* args,
 
   Py_ssize_t sz;
   const char* c {PyUnicode_AsUTF8AndSize(pymeth, &sz)};
-  HTTPMethod httpmeth {str2meth({c, static_cast<std::size_t>(sz)})};
-  if(httpmeth == HTTPMethod::INVALID) {
+  auto hash {HTTPPerfectHash::in_word_set(c, static_cast<std::size_t>(sz))};
+  if(hash == nullptr) {
     PyErr_Format(PyExc_TypeError, "%U is not a valid HTTP method", pymeth);
     return nullptr;
   }
@@ -284,8 +294,8 @@ PyObject* PyRouter::lookup(PyRouter* self, PyObject* const* args,
   if(!c)
     return nullptr;
 
-  auto route_result {
-      self->httprouter_.get_route(httpmeth, {c, static_cast<std::size_t>(sz)})};
+  auto route_result {self->httprouter_.get_route(hash->meth,
+      {c, static_cast<std::size_t>(sz)})};
 
   if(!route_result) {
     PyErr_SetString(PyExc_LookupError, "No such route");
@@ -293,6 +303,7 @@ PyObject* PyRouter::lookup(PyRouter* self, PyObject* const* args,
   }
 
   auto dict {make_cap_dict(route_result->second)};
+  params_q.push(route_result->second.second);
   if(!dict)
     return nullptr;
 
@@ -329,8 +340,8 @@ PyObject* PyRouter::wsgi_app(PyRouter* self, PyObject* const* args,
   const char* c {PyUnicode_AsUTF8AndSize(meth, &sz)};
   if(!c)
     return nullptr;
-  HTTPMethod httpmeth {str2meth({c, static_cast<std::size_t>(sz)})};
-  if(httpmeth == HTTPMethod::INVALID) {
+  auto hash {HTTPPerfectHash::in_word_set(c, static_cast<std::size_t>(sz))};
+  if(hash == nullptr) {
     PyErr_Format(PyExc_TypeError, "%U is not a valid HTTP method", meth);
     return nullptr;
   }
@@ -347,8 +358,8 @@ PyObject* PyRouter::wsgi_app(PyRouter* self, PyObject* const* args,
   if(!c)
     return nullptr;
 
-  auto route_result {
-      self->httprouter_.get_route(httpmeth, {c, static_cast<std::size_t>(sz)})};
+  auto route_result {self->httprouter_.get_route(hash->meth,
+      {c, static_cast<std::size_t>(sz)})};
 
   if(!route_result) {
     PyErr_SetString(PyExc_LookupError, "No such route");
@@ -356,6 +367,7 @@ PyObject* PyRouter::wsgi_app(PyRouter* self, PyObject* const* args,
   }
 
   auto dict {make_cap_dict(route_result->second)};
+  params_q.push(route_result->second.second);
   if(!dict)
     return nullptr;
 
@@ -370,9 +382,9 @@ PyObject* PyRouter::wsgi_app(PyRouter* self, PyObject* const* args,
 
 namespace {
 
-PyMethodDef register_routes_def {
-    .ml_name = "nanoroute.register_routes",
-    .ml_meth = (PyCFunction) PyRouter::register_routes,
+PyMethodDef register_route_def {
+    .ml_name = "nanoroute.register_route",
+    .ml_meth = (PyCFunction) PyRouter::register_route,
     .ml_flags = METH_FASTCALL,
 };
 
@@ -383,7 +395,7 @@ PyObject* PyRouter::route_(HTTPMethod meth, PyObject* route_def) {
   if(!cap)
     return nullptr;
 
-  auto f {PyCFunction_New(&register_routes_def, cap)};
+  auto f {PyCFunction_New(&register_route_def, cap)};
   if(!f) {
     Py_DECREF(cap);
     return nullptr;
@@ -397,7 +409,7 @@ PyObject* PyRouter::route_(std::vector<HTTPMethod> meth, PyObject* route_def) {
   if(!cap)
     return nullptr;
 
-  auto f {PyCFunction_New(&register_routes_def, cap)};
+  auto f {PyCFunction_New(&register_route_def, cap)};
   if(!f) {
     Py_DECREF(cap);
     return nullptr;

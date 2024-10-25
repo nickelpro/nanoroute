@@ -1,15 +1,17 @@
 #ifndef NANOROUTE_UTIL_HPP
 #define NANOROUTE_UTIL_HPP
 
-#include <string_view>
-
-#include <HTTPRouter.hpp>
-
+#include <cstdint>
 
 namespace nanoroute {
 
-HTTPMethod str2meth(std::string_view str);
+enum struct HTTPMethod : std::int8_t {
+  INVALID = -1,
+#define HTTP_METHOD(code, name, sym) sym = code,
+#include "http_method.def"
+  MAX,
+};
 
-}
+} // namespace nanoroute
 
 #endif // NANOROUTE_UTIL_HPP

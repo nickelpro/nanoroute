@@ -8,9 +8,7 @@ router.get('/hello')(None)
 router.get('/hello/world')(None)
 router.get('/goodbye')(None)
 router.get('/goodbyte/world')(None)
-router.get('/{a}/alpha')(None)
-router.get('/{b}/beta')(None)
 
-print(locals())
+router.get("hello")
 
 print(timeit.timeit("router.lookup('GET', '/hello/world')", globals=locals()))

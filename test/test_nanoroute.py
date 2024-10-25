@@ -155,7 +155,7 @@ def test_absolute():
 
 def test_capture():
   router = nanoroute.router()
-  router.get('/{a}/{b}')(None)
+  router.get('/:a/:b')(None)
   _, caps = router.lookup('GET', '/alpha/beta')
   assert caps['a'] == 'alpha'
   assert caps['b'] == 'beta'
@@ -163,8 +163,8 @@ def test_capture():
 
 def test_disambiguate():
   router = nanoroute.router()
-  router.get('/{a}/alpha')(1)
-  router.get('/{b}/beta')(2)
+  router.get('/:a/alpha')(1)
+  router.get('/:b/beta')(2)
 
   val, caps = router.lookup('GET', '/foo/alpha')
   assert val == 1
@@ -175,3 +175,14 @@ def test_disambiguate():
   assert val == 2
   assert len(caps) == 1
   assert caps['b'] == 'bar'
+
+
+def test_catchall():
+  router = nanoroute.router()
+  router.get('/:a/*b')(1)
+
+  val, caps = router.lookup('GET', '/alpha/foo/bar')
+  assert val == 1
+  assert len(caps) == 2
+  assert caps['a'] == 'alpha'
+  assert caps['b'] == 'foo/bar'
