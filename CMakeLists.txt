@@ -8,9 +8,6 @@ option(NANOROUTE_STRIP "Run system strip on compiled module" ON)
 find_package(Python3 3.13 REQUIRED COMPONENTS Development.Module)
 
 Python3_add_library(nanoroute MODULE)
-target_link_libraries(nanoroute PRIVATE
-  Python3::Module
-)
 target_compile_features(nanoroute PRIVATE cxx_std_23)
 set_target_properties(nanoroute PROPERTIES CXX_VISIBILITY_PRESET hidden)
 

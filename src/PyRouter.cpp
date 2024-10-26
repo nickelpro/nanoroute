@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstddef>
+#include <stdexcept>
 #include <string_view>
 #include <vector>
 
@@ -134,7 +135,13 @@ PyObject* PyRouter::register_route(PyObject* self, PyObject* const* args,
 
   for(auto meth : rg->meths) {
     Py_INCREF(pyo);
-    rg->pyrouter->httprouter_.reg_route(meth, route, pyo);
+    try {
+      rg->pyrouter->httprouter_.reg_route(meth, route, pyo);
+    } catch(const std::exception& e) {
+      Py_DECREF(pyo);
+      PyErr_SetString(PyExc_TypeError, e.what());
+      return nullptr;
+    }
   }
 
   Py_INCREF(pyo);
