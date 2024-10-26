@@ -134,9 +134,7 @@ PyObject* PyRouter::register_route(PyObject* self, PyObject* const* args,
 
   for(auto meth : rg->meths) {
     Py_INCREF(pyo);
-    auto old {rg->pyrouter->httprouter_.reg_route(meth, route, pyo)};
-    if(old)
-      Py_DECREF(*old);
+    rg->pyrouter->httprouter_.reg_route(meth, route, pyo);
   }
 
   Py_INCREF(pyo);
@@ -307,7 +305,7 @@ PyObject* PyRouter::lookup(PyRouter* self, PyObject* const* args,
   if(!dict)
     return nullptr;
 
-  auto tuple {PyTuple_Pack(2, *route_result->first, dict)};
+  auto tuple {PyTuple_Pack(2, route_result->first, dict)};
   Py_DECREF(dict);
   return tuple;
 }
@@ -376,7 +374,7 @@ PyObject* PyRouter::wsgi_app(PyRouter* self, PyObject* const* args,
   if(err)
     return nullptr;
 
-  return PyObject_CallFunctionObjArgs(*route_result->first, ws_env,
+  return PyObject_CallFunctionObjArgs(route_result->first, ws_env,
       start_response, nullptr);
 }
 

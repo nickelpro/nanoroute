@@ -10,8 +10,6 @@
 
 namespace nanoroute {
 
-using PyObjectRouter = HTTPRouter<PyObject*>;
-
 extern PyType_Spec router_spec;
 
 struct PyRouter : PyObject {
@@ -46,7 +44,7 @@ private:
   PyObject* route_(HTTPMethod meth, PyObject* route_def);
   PyObject* route_(std::vector<HTTPMethod> meth, PyObject* route_def);
 
-  PyObjectRouter httprouter_;
+  HTTPRouter httprouter_;
   PyObject* mod_;
   NanorouteState* state_;
 };
