@@ -315,20 +315,12 @@ std::optional<HTTPRouter::val_ret> HTTPRouter::Node::get_value(Node* node,
 
       return {};
     } else if(node->type_ == NodeType::PARAM) {
-      auto end {route.find('/')};
-
-      if(end != route.npos) {
+      if(auto end {route.find('/')}; end != route.npos) {
         params->push_back(left_slice(route, end));
         route = right_slice(route, end);
         node = &node->children_[0];
         continue;
       }
-
-      params->push_back(route);
-      if(node->val_)
-        return val_ret {node->val_, {&node->keys_, params}};
-
-      return {};
     }
 
     params->push_back(route);

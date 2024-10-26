@@ -4,6 +4,9 @@ T = TypeVar('handle')
 
 
 class router:
+  def __init__() -> None:
+    ...
+
   def get(route: str, /) -> Callable[[T], T]:
     ...
 
@@ -19,7 +22,7 @@ class router:
   def route(route: str | Iterable[str], /) -> Callable[[T], T]:
     ...
 
-  def lookup(path: str, /) -> tuple[Any, dict[str, str]]:
+  def lookup(method: str, path: str, /) -> tuple[Any, dict[str, str]]:
     ...
 
   def wsgi_app(

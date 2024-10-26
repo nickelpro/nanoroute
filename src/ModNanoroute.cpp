@@ -29,14 +29,14 @@ void nrmod_free(void* mod) {
 }
 
 int nrmod_exec(PyObject* mod) {
-  auto type {reinterpret_cast<PyTypeObject*>(
-      PyType_FromModuleAndSpec(mod, &router_spec, nullptr))};
-  if(!type)
-    return -1;
-  if(PyModule_AddType(mod, type) < 0)
-    return -1;
-
   auto state {static_cast<NanorouteState*>(PyModule_GetState(mod))};
+
+  state->RouterType = reinterpret_cast<PyTypeObject*>(
+      PyType_FromModuleAndSpec(mod, &router_spec, nullptr));
+  if(!state->RouterType)
+    return -1;
+  if(PyModule_AddType(mod, state->RouterType) < 0)
+    return -1;
 
   state->req_meth_string = PyUnicode_InternFromString("REQUEST_METHOD");
   if(!state->req_meth_string)
@@ -46,24 +46,25 @@ int nrmod_exec(PyObject* mod) {
   if(!state->path_info_string)
     return -1;
 
-  state->wsgi_key_string = PyUnicode_InternFromString("nanoroute.captures");
+  state->wsgi_key_string = PyUnicode_InternFromString("nanoroute.params");
   if(!state->wsgi_key_string)
     return -1;
 
   return 0;
 }
 
+#define slot(s, v)                                                             \
+  PyModuleDef_Slot {                                                           \
+    s, reinterpret_cast<void*>(v)                                              \
+  }
+
 std::array nrmod_slots {
-    PyModuleDef_Slot {
-        .slot = Py_mod_exec,
-        .value = reinterpret_cast<void*>(nrmod_exec),
-    },
-    PyModuleDef_Slot {
-        .slot = Py_mod_multiple_interpreters,
-        .value = Py_MOD_PER_INTERPRETER_GIL_SUPPORTED,
-    },
+    slot(Py_mod_exec, nrmod_exec),
+    slot(Py_mod_multiple_interpreters, Py_MOD_PER_INTERPRETER_GIL_SUPPORTED),
+    slot(Py_mod_gil, Py_MOD_GIL_NOT_USED),
     PyModuleDef_Slot {},
 };
+#undef slot
 
 } // namespace
 

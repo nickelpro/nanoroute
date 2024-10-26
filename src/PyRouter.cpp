@@ -77,7 +77,7 @@ struct RegisterClosure {
   static PyObject* alloc(PyRouter* router, PyObject* route,
       std::vector<HTTPMethod> meths) {
     return capsulize(new RegisterClosure {router, route, std::move(meths)});
-  };
+  }
 
 private:
   static PyObject* capsulize(RegisterClosure* rg) {
@@ -447,6 +447,7 @@ int PyRouter::init(PyRouter* self, PyObject* /*args*/, PyObject* /*kwargs*/) {
 }
 
 int PyRouter::traverse(PyRouter* self, visitproc visit, void* arg) {
+  Py_VISIT(Py_TYPE(self));
   Py_VISIT(self->mod_);
   auto result {self->httprouter_.traverse(
       [&](PyObject* app) {
