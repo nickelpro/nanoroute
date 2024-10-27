@@ -4,6 +4,7 @@
 
 # Miscellaneous build and testing folders
 build/
+_build/
 callgrind/
 sandbox/
 dist/

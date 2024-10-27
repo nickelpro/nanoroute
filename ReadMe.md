@@ -165,16 +165,3 @@ def wsgi_app(environ, start_response):
 
 app.wsgi_app = wsgi_app
 ```
-
-## Implementation Details
-
-Nanoroute's underlying data structure is conceptually
-[the same priority radix-tree used by httprouter](https://github.com/julienschmidt/httprouter?tab=readme-ov-file#how-does-it-work).
-
-The only divergence in structure is with named parameters. Httproute stores
-parameter names inline in the tree structure, which means all routes
-must provide the same name for a given parameter and parameters _must_ be named.
-
-Nanoroute stores parameter names alongside the route handler, and maps them
-positionally to parameter values captured from the route. Empty parameter
-names and their associated values are skipped.

@@ -1,0 +1,52 @@
+name: Docs
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - v2.0-rewrite
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Docs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docs
+        run: |
+          pipx install sphinx
+          sphinx-build docs _build
+
+      - name: Add CNAME
+        run: echo nanoroute.dev > _build/CNAME
+
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _build
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    needs: build
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
