@@ -43,6 +43,7 @@ jobs:
           path: _build
 
   deploy:
+    name: Deploy Site
     runs-on: ubuntu-latest
 
     environment:
