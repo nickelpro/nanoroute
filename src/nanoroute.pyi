@@ -1,4 +1,4 @@
-from typing import Any, Iterable, Callable, TypeVar
+from typing import Any, Callable, Iterable, TypeVar
 
 T = TypeVar('handle')
 
@@ -109,7 +109,7 @@ class router:
 
       def wsgi_app(environ, start_response):
         handler, params = app.lookup(
-            environ['REQUEST_METHOD'], 
+            environ['REQUEST_METHOD'],
             environ['PATH_INFO']
         )
         environ['nanoroute.params'] = params

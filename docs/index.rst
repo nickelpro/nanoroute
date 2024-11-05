@@ -24,19 +24,21 @@ nanoroute
 Features
 ========
 
-* I should write stuff here
-* And here
-* And also here if I can think of a third thing
+* Simple, flexible route definition syntax
+* Cross platform
+* WSGI / PEP 3333 support
+* Fast as all hell
 
 
 Project background
 ==================
 
 **nanoroute** is a C++ implementation of a modified version of the priority
-radix-tree algorithm pioneered by Julien Schmidt's httprouter. Like httprouter,
-**nanoroute**'s underlying implementation performs no allocations in the common
-case, although some allocations are necessary to create the PyObjects necessary
-for the CPython bindings.
+radix-tree algorithm pioneered by
+`Julien Schmidt's httprouter <https://github.com/julienschmidt/httprouter>`_.
+Like httprouter, **nanoroute**'s underlying implementation performs no
+allocations in the common case, although some allocations are necessary to
+create the PyObjects necessary for the CPython bindings.
 
 The **nanoroute** package is suitable as a building block for more fully
 featured HTTP frameworks. It also provides a simple WSGI interface for
