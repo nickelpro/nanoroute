@@ -1,10 +1,10 @@
-name: Docs
+name: Publish Docs
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - v2.0-rewrite
+  release:
+    types:
+      - published
 
 permissions:
   contents: read
