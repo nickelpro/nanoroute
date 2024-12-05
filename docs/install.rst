@@ -5,7 +5,7 @@ Installation
 for:
 
 * Windows (x86_64)
-* MacOS 13.0+ (arm64)
+* MacOS 13.3+ (arm64)
 * manylinux_2_39 (x86_64)
 
 On the supported platforms installing **nanoroute** is as simple as invoking
@@ -52,4 +52,4 @@ two additional options worth noting:
 
 * ``NANOROUTE_USE_IPO``: Use interprocedural optimization if supported
   (**Default:** On)
-* ``NANOROUTE_STRIP``: Run system strip on compiled module (**Default:** On)
+* ``NANOROUTE_STRIP``: Run system strip on the compiled module (**Default:** On)

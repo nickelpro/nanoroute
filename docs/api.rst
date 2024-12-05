@@ -12,7 +12,7 @@ appearance in the route definition until the following forward slash (``/``) or
 the end of the URL. Only a single path segment parameter may exist in a given
 URL path segment.
 
-Path segment delimiters may optionally be a name, in which case the
+Path segment delimiters may optionally be followed by a name, in which case the
 captured text from the URL will be associated with that name in the returned
 parameter dictionary when a lookup is performed.
 
@@ -27,8 +27,8 @@ Examples::
                           # captured text
 
 
-Catchall are delimited by an asterisk (``*``) and work the same as path
-segment delimiters, except they always match to the end of the URL including
+Catchalls are delimited by an asterisk (``*``) and work the same as path
+segment parameters, except they always match to the end of the URL including
 any forward slashes.
 
 Examples::
