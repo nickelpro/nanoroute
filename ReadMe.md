@@ -22,7 +22,7 @@ unlikely to be very significant in a typical database-backed Python REST API.
 
 ## Quickstart
 
-For complete documentation, see the [docs]().
+For complete documentation, see the [docs](https://nanoroute.dev).
 
 #### Installation
 
