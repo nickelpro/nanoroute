@@ -1,6 +1,6 @@
 project = 'nanoroute'
 author = 'Vito Gamberini'
-release = '2.0.1'
+release = '2.0.2'
 
 html_show_copyright = False
 

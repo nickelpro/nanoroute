@@ -1,6 +1,6 @@
 [project]
 name = "nanoroute"
-version = "2.0.1"
+version = "2.0.2"
 description = "Small, fast, HTTP URL router"
 readme = "ReadMe.md"
 requires-python = ">=3.13"
