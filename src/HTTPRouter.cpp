@@ -292,8 +292,10 @@ std::optional<HTTPRouter::val_ret> HTTPRouter::Node::get_value(Node* node,
     if(node->type_ == NodeType::STATIC) {
       if(route.size() > node->prefix_.size()) {
 
-        if(!route.starts_with(node->prefix_))
+        if(!route.starts_with(node->prefix_)) {
+          params_q.push(params);
           return {};
+        }
 
         route = right_slice(route, node->prefix_.size());
 
@@ -303,8 +305,10 @@ std::optional<HTTPRouter::val_ret> HTTPRouter::Node::get_value(Node* node,
         }
 
         auto idx {node->indices_.find(route[0])};
-        if(idx == node->indices_.npos)
+        if(idx == node->indices_.npos) {
+          params_q.push(params);
           return {};
+        }
 
         node = &node->children_[idx];
         continue;
@@ -313,6 +317,7 @@ std::optional<HTTPRouter::val_ret> HTTPRouter::Node::get_value(Node* node,
       if(route == node->prefix_ && node->val_)
         return val_ret {node->val_, {&node->keys_, params}};
 
+      params_q.push(params);
       return {};
     } else if(node->type_ == NodeType::PARAM) {
       if(auto end {route.find('/')}; end != route.npos) {
@@ -327,6 +332,7 @@ std::optional<HTTPRouter::val_ret> HTTPRouter::Node::get_value(Node* node,
     if(node->val_)
       return val_ret {node->val_, {&node->keys_, params}};
 
+    params_q.push(params);
     return {};
   }
 }
