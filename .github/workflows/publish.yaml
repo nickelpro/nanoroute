@@ -18,7 +18,7 @@ jobs:
         env:
           CIBW_BUILD: "*win_amd64"
           CIBW_BUILD_FRONTEND: build
-        uses: pypa/cibuildwheel@v2.21.3
+        uses: pypa/cibuildwheel@v2.22
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -44,7 +44,7 @@ jobs:
           CIBW_BUILD: "*mac*"
           CIBW_BUILD_FRONTEND: build
           MACOSX_DEPLOYMENT_TARGET: "13.3"
-        uses: pypa/cibuildwheel@v2.21.3
+        uses: pypa/cibuildwheel@v2.22
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
