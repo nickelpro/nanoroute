@@ -16,11 +16,11 @@ classifiers = [
   "Operating System :: Microsoft :: Windows",
   "Operating System :: MacOS",
 ]
-urls = { "Documentation" = "https://github.com/nickelpro/nanoroute" }
+urls = { "Documentation" = "https://nanoroute.dev" }
 dependencies = []
 
 [build-system]
-requires = ["py-build-cmake~=0.2.0a14"]
+requires = ["py-build-cmake~=0.3.2"]
 build-backend = "py_build_cmake.build"
 
 [tool.py-build-cmake.module]
