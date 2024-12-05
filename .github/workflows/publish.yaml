@@ -66,6 +66,7 @@ jobs:
 
       - name: Build
         run: |
+          python -m pip install pipx
           pipx run build
           platform="$(ldd --version | awk '/ldd/{gsub(/\./, "_", $NF); print "manylinux_" $NF "_x86_64"}')"
           pipx run wheel tags --remove --platform=${platform} dist/*linux_x86_64.whl
