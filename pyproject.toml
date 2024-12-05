@@ -1,6 +1,6 @@
 [project]
 name = "nanoroute"
-version = "2.0.0"
+version = "2.0.1"
 description = "Small, fast, HTTP URL router"
 readme = "ReadMe.md"
 requires-python = ">=3.13"
@@ -20,7 +20,7 @@ urls = { "Documentation" = "https://nanoroute.dev" }
 dependencies = []
 
 [build-system]
-requires = ["py-build-cmake~=0.3.2"]
+requires = ["py-build-cmake~=0.2.0a14"]
 build-backend = "py_build_cmake.build"
 
 [tool.py-build-cmake.module]
@@ -31,8 +31,6 @@ include = ["CMakeLists.txt", "src"]
 
 [tool.py-build-cmake.cmake]
 minimum_version = "3.25"
-find_python = false
-find_python3 = false
 config = "Release"
 build_type = "Release"
 build_args = ["-j"]
