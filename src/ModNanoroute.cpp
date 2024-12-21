@@ -53,18 +53,17 @@ int nrmod_exec(PyObject* mod) {
   return 0;
 }
 
-#define slot(s, v)                                                             \
-  PyModuleDef_Slot {                                                           \
-    s, reinterpret_cast<void*>(v)                                              \
-  }
+struct slot__ : PyModuleDef_Slot {
+  slot__(int s, auto v) : PyModuleDef_Slot {s, reinterpret_cast<void*>(v)} {};
+  slot__() : PyModuleDef_Slot {} {};
+};
 
 std::array nrmod_slots {
-    slot(Py_mod_exec, nrmod_exec),
-    slot(Py_mod_multiple_interpreters, Py_MOD_PER_INTERPRETER_GIL_SUPPORTED),
-    slot(Py_mod_gil, Py_MOD_GIL_NOT_USED),
-    PyModuleDef_Slot {},
+    slot__(Py_mod_exec, nrmod_exec),
+    slot__(Py_mod_multiple_interpreters, Py_MOD_PER_INTERPRETER_GIL_SUPPORTED),
+    slot__(Py_mod_gil, Py_MOD_GIL_NOT_USED),
+    slot__(),
 };
-#undef slot
 
 } // namespace
 

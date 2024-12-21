@@ -19,40 +19,38 @@
 
 namespace nanoroute {
 namespace {
-#define meth(n, f)                                                             \
-  PyMethodDef {                                                                \
-    n, (PyCFunction) f, METH_FASTCALL                                          \
-  }
+
+struct meth__ : PyMethodDef {
+  meth__(const char* n, auto f)
+      : PyMethodDef {n, reinterpret_cast<PyCFunction>(f), METH_FASTCALL} {};
+  meth__() : PyMethodDef {} {};
+};
 
 std::array router_methods {
-    meth("get", PyRouter::get),
-    meth("post", PyRouter::post),
-    meth("put", PyRouter::put),
-    meth("delete", PyRouter::delete_),
-    meth("route", PyRouter::route),
-    meth("lookup", PyRouter::lookup),
-    meth("wsgi_app", PyRouter::wsgi_app),
-    PyMethodDef {},
+    meth__("get", PyRouter::get),
+    meth__("post", PyRouter::post),
+    meth__("put", PyRouter::put),
+    meth__("delete", PyRouter::delete_),
+    meth__("route", PyRouter::route),
+    meth__("lookup", PyRouter::lookup),
+    meth__("wsgi_app", PyRouter::wsgi_app),
+    meth__(),
 };
 
-#undef meth
-
-#define slot(s, v)                                                             \
-  PyType_Slot {                                                                \
-    s, reinterpret_cast<void*>(v)                                              \
-  }
+struct slot__ : PyType_Slot {
+  slot__(int s, auto v) : PyType_Slot {s, reinterpret_cast<void*>(v)} {};
+  slot__() : PyType_Slot {} {};
+};
 
 std::array router_slots {
-    slot(Py_tp_dealloc, PyRouter::dealloc),
-    slot(Py_tp_traverse, PyRouter::traverse),
-    slot(Py_tp_clear, PyRouter::clear),
-    slot(Py_tp_methods, router_methods.data()),
-    slot(Py_tp_init, PyRouter::init),
-    slot(Py_tp_new, PyRouter::new_),
-    PyType_Slot {},
+    slot__(Py_tp_dealloc, PyRouter::dealloc),
+    slot__(Py_tp_traverse, PyRouter::traverse),
+    slot__(Py_tp_clear, PyRouter::clear),
+    slot__(Py_tp_methods, router_methods.data()),
+    slot__(Py_tp_init, PyRouter::init),
+    slot__(Py_tp_new, PyRouter::new_),
+    slot__(),
 };
-
-#undef slot
 } // namespace
 
 PyType_Spec router_spec {
