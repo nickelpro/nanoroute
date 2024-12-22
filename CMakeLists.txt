@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(nanoroute LANGUAGES CXX VERSION 2.0.2)
+project(nanoroute LANGUAGES CXX VERSION 2.0.3)
 
 option(NANOROUTE_USE_IPO "Use interprocedural optimization if supported" ON)
 option(NANOROUTE_STRIP "Run system strip on compiled module" ON)
