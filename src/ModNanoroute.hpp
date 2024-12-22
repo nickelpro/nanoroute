@@ -7,6 +7,7 @@ namespace nanoroute {
 
 struct NanorouteState {
   PyTypeObject* RouterType;
+  PyTypeObject* CBClosureType;
   PyObject* req_meth_string;
   PyObject* path_info_string;
   PyObject* wsgi_key_string;

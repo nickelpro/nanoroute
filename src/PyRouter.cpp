@@ -9,7 +9,6 @@
 #include <Python.h>
 
 #define Py_BUILD_CORE
-#include <internal/pycore_capsule.h>
 #include <internal/pycore_modsupport.h>
 
 #include "HTTPPerfectHash.hpp"
@@ -51,6 +50,14 @@ std::array router_slots {
     slot__(Py_tp_new, PyRouter::new_),
     slot__(),
 };
+
+std::array cbclosure_slots {
+    slot__(Py_tp_dealloc, PyCBClosure::dealloc),
+    slot__(Py_tp_traverse, PyCBClosure::traverse),
+    slot__(Py_tp_clear, PyCBClosure::clear),
+    slot__(),
+};
+
 } // namespace
 
 PyType_Spec router_spec {
@@ -61,56 +68,15 @@ PyType_Spec router_spec {
     .slots = router_slots.data(),
 };
 
-namespace {
-
-struct RegisterClosure {
-  PyRouter* pyrouter;
-  PyObject* route;
-  std::vector<HTTPMethod> meths;
-
-  static PyObject* alloc(PyRouter* router, PyObject* route, HTTPMethod meth) {
-    return capsulize(new RegisterClosure {router, route, {meth}});
-  }
-
-  static PyObject* alloc(PyRouter* router, PyObject* route,
-      std::vector<HTTPMethod> meths) {
-    return capsulize(new RegisterClosure {router, route, std::move(meths)});
-  }
-
-private:
-  static PyObject* capsulize(RegisterClosure* rg) {
-    auto cap {PyCapsule_New(rg, nullptr, RegisterClosure::dealloc)};
-
-    if(cap) {
-      Py_INCREF(rg->pyrouter);
-      Py_INCREF(rg->route);
-      _PyCapsule_SetTraverse(cap, traverse, clear);
-    } else {
-      delete rg;
-    }
-    return cap;
-  }
-
-  static int traverse(PyObject* cap, visitproc visit, void* arg) {
-    auto rg {static_cast<RegisterClosure*>(PyCapsule_GetPointer(cap, nullptr))};
-    Py_VISIT(rg->pyrouter);
-    return 0;
-  }
-
-  static int clear(PyObject* cap) {
-    auto rg {static_cast<RegisterClosure*>(PyCapsule_GetPointer(cap, nullptr))};
-    Py_CLEAR(rg->pyrouter);
-    return 0;
-  }
-
-  static void dealloc(PyObject* cap) {
-    auto rg {static_cast<RegisterClosure*>(PyCapsule_GetPointer(cap, nullptr))};
-    Py_CLEAR(rg->pyrouter);
-    Py_DECREF(rg->route);
-    delete rg;
-  }
+PyType_Spec cbclosure_spec {
+    .name = "nanoroute.cbclosure",
+    .basicsize = sizeof(PyCBClosure),
+    .flags = (Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_HAVE_GC |
+        Py_TPFLAGS_IMMUTABLETYPE),
+    .slots = cbclosure_slots.data(),
 };
 
+namespace {
 template <std::size_t N> void type_error(const char (&str)[N], PyObject* obj) {
   PyObject* name {PyType_GetName(Py_TYPE(obj))};
   PyErr_Format(PyExc_TypeError, str, name);
@@ -118,23 +84,55 @@ template <std::size_t N> void type_error(const char (&str)[N], PyObject* obj) {
 }
 } // namespace
 
-PyObject* PyRouter::register_route(PyObject* self, PyObject* const* args,
+PyCBClosure* PyCBClosure::internal_new(PyTypeObject* subtype,
+    PyRouter* pyrouter, PyObject* route, std::vector<HTTPMethod> meths) {
+
+  auto ptr {new(subtype->tp_alloc(subtype, sizeof(PyCBClosure)))
+          PyCBClosure(pyrouter, route, std::move(meths))};
+
+  if(!ptr)
+    return ptr;
+
+  Py_INCREF(pyrouter);
+  Py_INCREF(route);
+  return ptr;
+}
+
+int PyCBClosure::traverse(PyCBClosure* self, visitproc visit, void* arg) {
+  Py_VISIT(self->pyrouter);
+  return 0;
+}
+
+int PyCBClosure::clear(PyCBClosure* self) {
+  Py_CLEAR(self->pyrouter);
+  return 0;
+}
+
+void PyCBClosure::dealloc(PyCBClosure* self) {
+  PyObject_GC_UnTrack(self);
+  clear(self);
+  auto tp {Py_TYPE(self)};
+  self->~PyCBClosure();
+  tp->tp_free(self);
+  Py_DECREF(tp);
+}
+
+PyObject* PyRouter::register_route(PyCBClosure* self, PyObject* const* args,
     Py_ssize_t nargs) {
   PyObject* pyo;
   if(!_PyArg_ParseStack(args, nargs, "O:register_route", &pyo))
     return nullptr;
 
-  auto rg {static_cast<RegisterClosure*>(PyCapsule_GetPointer(self, nullptr))};
   Py_ssize_t sz;
-  const char* c {PyUnicode_AsUTF8AndSize(rg->route, &sz)};
+  const char* c {PyUnicode_AsUTF8AndSize(self->route, &sz)};
   if(!c)
     return nullptr;
   std::string_view route {c, static_cast<std::size_t>(sz)};
 
-  for(auto meth : rg->meths) {
+  for(auto meth : self->meths) {
     Py_INCREF(pyo);
     try {
-      rg->pyrouter->httprouter_.reg_route(meth, route, pyo);
+      self->pyrouter->httprouter_.reg_route(meth, route, pyo);
     } catch(const std::exception& e) {
       Py_DECREF(pyo);
       PyErr_SetString(PyExc_TypeError, e.what());
@@ -394,13 +392,14 @@ PyMethodDef register_route_def {
 } // namespace
 
 PyObject* PyRouter::route_(HTTPMethod meth, PyObject* route_def) {
-  auto cap {RegisterClosure::alloc(this, route_def, meth)};
-  if(!cap)
+  auto closure {PyCBClosure::internal_new(state_->CBClosureType, this,
+      route_def, {meth})};
+  if(!closure)
     return nullptr;
 
-  auto f {PyCFunction_New(&register_route_def, cap)};
+  auto f {PyCFunction_New(&register_route_def, closure)};
   if(!f) {
-    Py_DECREF(cap);
+    Py_DECREF(closure);
     return nullptr;
   }
 
@@ -408,13 +407,14 @@ PyObject* PyRouter::route_(HTTPMethod meth, PyObject* route_def) {
 }
 
 PyObject* PyRouter::route_(std::vector<HTTPMethod> meth, PyObject* route_def) {
-  auto cap {RegisterClosure::alloc(this, route_def, std::move(meth))};
-  if(!cap)
+  auto closure {PyCBClosure::internal_new(state_->CBClosureType, this,
+      route_def, std::move(meth))};
+  if(!closure)
     return nullptr;
 
-  auto f {PyCFunction_New(&register_route_def, cap)};
+  auto f {PyCFunction_New(&register_route_def, closure)};
   if(!f) {
-    Py_DECREF(cap);
+    Py_DECREF(closure);
     return nullptr;
   }
 

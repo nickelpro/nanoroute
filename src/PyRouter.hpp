@@ -11,6 +11,9 @@
 namespace nanoroute {
 
 extern PyType_Spec router_spec;
+extern PyType_Spec cbclosure_spec;
+
+struct PyCBClosure;
 
 struct PyRouter : PyObject {
 
@@ -28,7 +31,7 @@ struct PyRouter : PyObject {
   static PyObject* wsgi_app(PyRouter* self, PyObject* const* args,
       Py_ssize_t nargs);
 
-  static PyObject* register_route(PyObject* self, PyObject* const* args,
+  static PyObject* register_route(PyCBClosure* self, PyObject* const* args,
       Py_ssize_t nargs);
 
   static PyRouter* new_(PyTypeObject* subtype, PyObject* /*args*/,
@@ -47,6 +50,26 @@ private:
   HTTPRouter httprouter_;
   PyObject* mod_;
   NanorouteState* state_;
+};
+
+struct PyCBClosure : PyObject {
+  static PyCBClosure* internal_new(PyTypeObject* subtype, PyRouter* pyrouter,
+      PyObject* route, std::vector<HTTPMethod> meths);
+
+private:
+  PyCBClosure(PyRouter* pyrouter, PyObject* route,
+      std::vector<HTTPMethod> meths)
+      : pyrouter {pyrouter}, route {route}, meths {std::move(meths)} {}
+
+public:
+  static int traverse(PyCBClosure* self, visitproc visit, void* arg);
+  static int clear(PyCBClosure* self);
+
+  static void dealloc(PyCBClosure* self);
+
+  PyRouter* pyrouter;
+  PyObject* route;
+  std::vector<HTTPMethod> meths;
 };
 
 } // namespace nanoroute

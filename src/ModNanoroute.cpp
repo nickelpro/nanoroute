@@ -12,15 +12,17 @@ namespace {
 int nrmod_traverse(PyObject* mod, visitproc visit, void* arg) {
   auto state {static_cast<NanorouteState*>(PyModule_GetState(mod))};
   Py_VISIT(state->RouterType);
+  Py_VISIT(state->CBClosureType);
   return 0;
 }
 
 int nrmod_clear(PyObject* mod) {
   auto state {static_cast<NanorouteState*>(PyModule_GetState(mod))};
   Py_CLEAR(state->RouterType);
-  Py_XDECREF(state->req_meth_string);
-  Py_XDECREF(state->path_info_string);
-  Py_XDECREF(state->wsgi_key_string);
+  Py_CLEAR(state->CBClosureType);
+  Py_CLEAR(state->req_meth_string);
+  Py_CLEAR(state->path_info_string);
+  Py_CLEAR(state->wsgi_key_string);
   return 0;
 }
 
@@ -36,6 +38,11 @@ int nrmod_exec(PyObject* mod) {
   if(!state->RouterType)
     return -1;
   if(PyModule_AddType(mod, state->RouterType) < 0)
+    return -1;
+
+  state->CBClosureType = reinterpret_cast<PyTypeObject*>(
+      PyType_FromModuleAndSpec(mod, &cbclosure_spec, nullptr));
+  if(!state->CBClosureType)
     return -1;
 
   state->req_meth_string = PyUnicode_InternFromString("REQUEST_METHOD");
