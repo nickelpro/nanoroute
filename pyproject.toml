@@ -20,7 +20,7 @@ urls = { "Documentation" = "https://nanoroute.dev" }
 dependencies = []
 
 [build-system]
-requires = ["py-build-cmake~=0.3.3"]
+requires = ["py-build-cmake~=0.3.4"]
 build-backend = "py_build_cmake.build"
 
 [tool.py-build-cmake.module]

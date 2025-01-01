@@ -447,15 +447,14 @@ int PyRouter::init(PyRouter* self, PyObject* /*args*/, PyObject* /*kwargs*/) {
 int PyRouter::traverse(PyRouter* self, visitproc visit, void* arg) {
   Py_VISIT(Py_TYPE(self));
   Py_VISIT(self->mod_);
-  auto result {self->httprouter_.traverse(
-      [&](PyObject* app) {
-        Py_VISIT(app);
-        return 0;
-      },
-      [](int v) { return v; })};
-  if(result)
-    return *result;
-  return 0;
+  return self->httprouter_
+      .traverse(
+          [&](PyObject* app) {
+            Py_VISIT(app);
+            return 0;
+          },
+          [](int v) { return v; })
+      .value_or(0);
 }
 
 int PyRouter::clear(PyRouter* self) {
