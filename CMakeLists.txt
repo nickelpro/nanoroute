@@ -4,8 +4,14 @@ project(nanoroute LANGUAGES CXX VERSION 2.0.3)
 
 option(NANOROUTE_USE_IPO "Use interprocedural optimization if supported" ON)
 option(NANOROUTE_STRIP "Run system strip on compiled module" ON)
+option(NANOROUTE_GEN_IWYU_MAPPINGS "Generate Python mappings for IWYU" OFF)
 
-find_package(Python3 3.13 REQUIRED COMPONENTS Development.Module)
+if(NANOROUTE_GEN_IWYU_MAPPINGS)
+  find_package(Python3 3.13 REQUIRED COMPONENTS Interpreter Development.Module)
+  include(cmake/GetIWYUMapGen.cmake)
+else()
+  find_package(Python3 3.13 REQUIRED COMPONENTS Development.Module)
+endif()
 
 Python3_add_library(nanoroute MODULE)
 target_compile_features(nanoroute PRIVATE cxx_std_23)

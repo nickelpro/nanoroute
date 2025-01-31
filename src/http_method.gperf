@@ -1,7 +1,9 @@
 %{
+// IWYU pragma: no_include <__stddef_size_t.h>
 #include "Util.hpp"
 
 namespace nanoroute {
+
 %}
 %struct-type
 %language=C++

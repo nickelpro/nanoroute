@@ -1,10 +1,9 @@
 #include "HTTPRouter.hpp"
 
+#include <algorithm>
 #include <array>
 #include <cstddef>
-#include <cstdint>
 #include <cstring>
-#include <functional>
 #include <optional>
 #include <queue>
 #include <stdexcept>
@@ -13,9 +12,7 @@
 #include <utility>
 #include <vector>
 
-#include "Python.h"
-
-#include "Util.hpp"
+#include <Python.h>
 
 using std::operator""sv;
 

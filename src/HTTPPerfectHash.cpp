@@ -31,10 +31,12 @@
 
 #line 1 "http_method.gperf"
 
+// IWYU pragma: no_include <__stddef_size_t.h>
 #include "Util.hpp"
 
 namespace nanoroute {
-#line 16 "http_method.gperf"
+
+#line 18 "http_method.gperf"
 struct PerfectHashResult {const char* name; HTTPMethod meth;};
 #include <string.h>
 enum
@@ -107,121 +109,121 @@ static const unsigned char lengthtable[] =
 static const struct PerfectHashResult wordlist[] =
   {
     {""}, {""}, {""},
-#line 22 "http_method.gperf"
+#line 24 "http_method.gperf"
     {"PUT",           HTTPMethod::Put},
-#line 21 "http_method.gperf"
+#line 23 "http_method.gperf"
     {"POST",          HTTPMethod::Post},
-#line 57 "http_method.gperf"
+#line 59 "http_method.gperf"
     {"PAUSE",         HTTPMethod::Pause},
-#line 51 "http_method.gperf"
+#line 53 "http_method.gperf"
     {"SOURCE",        HTTPMethod::Source},
     {""},
-#line 52 "http_method.gperf"
+#line 54 "http_method.gperf"
     {"PRI",           HTTPMethod::Pri},
-#line 56 "http_method.gperf"
-    {"PLAY",          HTTPMethod::Play},
-#line 46 "http_method.gperf"
-    {"PATCH",         HTTPMethod::Patch},
-#line 32 "http_method.gperf"
-    {"SEARCH",        HTTPMethod::Search},
-#line 24 "http_method.gperf"
-    {"OPTIONS",       HTTPMethod::Options},
 #line 58 "http_method.gperf"
+    {"PLAY",          HTTPMethod::Play},
+#line 48 "http_method.gperf"
+    {"PATCH",         HTTPMethod::Patch},
+#line 34 "http_method.gperf"
+    {"SEARCH",        HTTPMethod::Search},
+#line 26 "http_method.gperf"
+    {"OPTIONS",       HTTPMethod::Options},
+#line 60 "http_method.gperf"
     {"TEARDOWN",      HTTPMethod::Teardown},
     {""},
-#line 25 "http_method.gperf"
+#line 27 "http_method.gperf"
     {"TRACE",         HTTPMethod::Trace},
-#line 38 "http_method.gperf"
+#line 40 "http_method.gperf"
     {"REPORT",        HTTPMethod::Report},
     {""},
-#line 53 "http_method.gperf"
+#line 55 "http_method.gperf"
     {"DESCRIBE",      HTTPMethod::Describe},
     {""}, {""},
-#line 33 "http_method.gperf"
+#line 35 "http_method.gperf"
     {"UNLOCK",        HTTPMethod::Unlock},
     {""},
-#line 37 "http_method.gperf"
-    {"ACL",           HTTPMethod::ACL},
-#line 26 "http_method.gperf"
-    {"COPY",          HTTPMethod::Copy},
 #line 39 "http_method.gperf"
+    {"ACL",           HTTPMethod::ACL},
+#line 28 "http_method.gperf"
+    {"COPY",          HTTPMethod::Copy},
+#line 41 "http_method.gperf"
     {"MKACTIVITY",    HTTPMethod::MkActivity},
-#line 50 "http_method.gperf"
+#line 52 "http_method.gperf"
     {"UNLINK",        HTTPMethod::Unlink},
     {""},
-#line 61 "http_method.gperf"
+#line 63 "http_method.gperf"
     {"REDIRECT",      HTTPMethod::Redirect},
-#line 44 "http_method.gperf"
+#line 46 "http_method.gperf"
     {"SUBSCRIBE",     HTTPMethod::Subscribe},
-#line 28 "http_method.gperf"
+#line 30 "http_method.gperf"
     {"MKCOL",         HTTPMethod::MkCol},
-#line 36 "http_method.gperf"
+#line 38 "http_method.gperf"
     {"UNBIND",        HTTPMethod::Unbind},
     {""},
-#line 40 "http_method.gperf"
+#line 42 "http_method.gperf"
     {"CHECKOUT",      HTTPMethod::Checkout},
     {""},
-#line 63 "http_method.gperf"
+#line 65 "http_method.gperf"
     {"FLUSH",         HTTPMethod::Flush},
-#line 62 "http_method.gperf"
+#line 64 "http_method.gperf"
     {"RECORD",        HTTPMethod::Record},
     {""},
-#line 60 "http_method.gperf"
+#line 62 "http_method.gperf"
     {"SET_PARAMETER", HTTPMethod::Set_Parameter},
     {""}, {""},
-#line 35 "http_method.gperf"
+#line 37 "http_method.gperf"
     {"REBIND",        HTTPMethod::Rebind},
     {""},
-#line 42 "http_method.gperf"
+#line 44 "http_method.gperf"
     {"M-SEARCH",      HTTPMethod::MSearch},
     {""},
-#line 55 "http_method.gperf"
+#line 57 "http_method.gperf"
     {"SETUP",         HTTPMethod::Setup},
-#line 43 "http_method.gperf"
+#line 45 "http_method.gperf"
     {"NOTIFY",        HTTPMethod::Notify},
     {""},
-#line 54 "http_method.gperf"
+#line 56 "http_method.gperf"
     {"ANNOUNCE",      HTTPMethod::Announce},
     {""}, {""},
-#line 45 "http_method.gperf"
+#line 47 "http_method.gperf"
     {"UNSUBSCRIBE",   HTTPMethod::Unsubscribe},
     {""},
-#line 19 "http_method.gperf"
+#line 21 "http_method.gperf"
     {"GET",           HTTPMethod::Get},
-#line 27 "http_method.gperf"
+#line 29 "http_method.gperf"
     {"LOCK",          HTTPMethod::Lock},
-#line 48 "http_method.gperf"
+#line 50 "http_method.gperf"
     {"MKCALENDAR",    HTTPMethod::MkCalendar},
-#line 18 "http_method.gperf"
+#line 20 "http_method.gperf"
     {"DELETE",        HTTPMethod::Delete},
     {""}, {""},
-#line 34 "http_method.gperf"
+#line 36 "http_method.gperf"
     {"BIND",          HTTPMethod::Bind},
-#line 64 "http_method.gperf"
+#line 66 "http_method.gperf"
     {"QUERY",         HTTPMethod::Query},
     {""},
-#line 23 "http_method.gperf"
+#line 25 "http_method.gperf"
     {"CONNECT",       HTTPMethod::Connect},
-#line 30 "http_method.gperf"
+#line 32 "http_method.gperf"
     {"PROPFIND",      HTTPMethod::PropFind},
-#line 31 "http_method.gperf"
+#line 33 "http_method.gperf"
     {"PROPPATCH",     HTTPMethod::PropPatch},
-#line 20 "http_method.gperf"
+#line 22 "http_method.gperf"
     {"HEAD",          HTTPMethod::Head},
     {""}, {""}, {""},
-#line 49 "http_method.gperf"
+#line 51 "http_method.gperf"
     {"LINK",          HTTPMethod::Link},
     {""},
-#line 47 "http_method.gperf"
+#line 49 "http_method.gperf"
     {"PURGE",         HTTPMethod::Purge},
     {""}, {""}, {""}, {""},
-#line 41 "http_method.gperf"
+#line 43 "http_method.gperf"
     {"MERGE",         HTTPMethod::Merge},
     {""}, {""},
-#line 29 "http_method.gperf"
+#line 31 "http_method.gperf"
     {"MOVE",          HTTPMethod::Move},
     {""}, {""}, {""}, {""}, {""}, {""}, {""}, {""},
-#line 59 "http_method.gperf"
+#line 61 "http_method.gperf"
     {"GET_PARAMETER", HTTPMethod::Get_Parameter}
   };
 
@@ -243,6 +245,6 @@ HTTPPerfectHash::in_word_set (const char *str, size_t len)
     }
   return 0;
 }
-#line 65 "http_method.gperf"
+#line 67 "http_method.gperf"
 
 }

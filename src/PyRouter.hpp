@@ -1,12 +1,18 @@
 #ifndef NANOROUTE_PYROUTER_HPP
 #define NANOROUTE_PYROUTER_HPP
 
+#include <cstdint>
+#include <utility>
 #include <vector>
 
 #include <Python.h>
 
 #include "HTTPRouter.hpp"
-#include "ModNanoroute.hpp"
+
+namespace nanoroute {
+enum struct HTTPMethod : std::int8_t;
+struct NanorouteState;
+} // namespace nanoroute
 
 namespace nanoroute {
 

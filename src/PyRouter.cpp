@@ -1,9 +1,15 @@
 #include "PyRouter.hpp"
 
+// https://github.com/include-what-you-use/include-what-you-use/issues/1616
+// IWYU pragma: no_include <iterator>
+
 #include <array>
 #include <cstddef>
-#include <stdexcept>
+#include <new>
+#include <optional>
+#include <string>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 #include <Python.h>

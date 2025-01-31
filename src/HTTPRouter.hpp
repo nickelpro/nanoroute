@@ -1,6 +1,9 @@
 #ifndef NANOROUTE_HTTPROUTER_HPP
 #define NANOROUTE_HTTPROUTER_HPP
 
+// https://github.com/include-what-you-use/include-what-you-use/issues/1616
+// IWYU pragma: no_include <iterator>
+
 #include <array>
 #include <concepts>
 #include <cstddef>
@@ -10,10 +13,11 @@
 #include <queue>
 #include <string>
 #include <string_view>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
-#include "Python.h"
+#include <Python.h>
 
 #include "Util.hpp"
 
