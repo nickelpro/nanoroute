@@ -23,7 +23,9 @@ jobs:
         run: |
           python -m venv .venv
           .venv\Scripts\Activate.ps1
-          pip install .
+          python -m pip install --upgrade pip
+          pip install '.[test]' -v `
+            -C verbose=1
 
       - name: Test
         run: |
@@ -50,16 +52,19 @@ jobs:
           python-version: "3.13"
 
       - name: Build
+        env:
+          MACOSX_DEPLOYMENT_TARGET: 13.3
+          ARCHFLAGS: "-arch arm64"
         run: |
           python -m venv .venv
           . .venv/bin/activate
           pip install --upgrade pip
-          pip install .
+          pip install '.[test]' -v \
+            -C verbose=1=1
 
       - name: Test
         run: |
           . .venv/bin/activate
-          pip install pytest
           pytest test
 
   build_linux:
@@ -79,12 +84,12 @@ jobs:
           python -m venv .venv
           . .venv/bin/activate
           pip install --upgrade pip
-          pip install .
+          pip install '.[test]' -v \
+            -C verbose=1
 
       - name: Test
         run: |
           . .venv/bin/activate
-          pip install pytest
           pytest test
 
   build_docs:
