@@ -223,8 +223,10 @@ PyObject* PyRouter::route(PyRouter* self, PyObject* const* args,
 
     Py_ssize_t sz;
     const char* c {PyUnicode_AsUTF8AndSize(next, &sz)};
-    if(!c)
+    if(!c) {
+      Py_DECREF(next);
       return nullptr;
+    }
 
     auto hash {HTTPPerfectHash::in_word_set(c, static_cast<std::size_t>(sz))};
     if(hash == nullptr) {
