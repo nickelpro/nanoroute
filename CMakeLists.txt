@@ -7,12 +7,10 @@ option(NANOROUTE_STRIP "Run system strip on compiled module" ON)
 option(NANOROUTE_GEN_IWYU_MAPPINGS "Generate Python mappings for IWYU" OFF)
 
 if(NANOROUTE_GEN_IWYU_MAPPINGS)
-  find_package(Python3 3.13 REQUIRED COMPONENTS Interpreter Development.Module)
   include(cmake/GetIWYUMapGen.cmake)
-else()
-  find_package(Python3 3.13 REQUIRED COMPONENTS Development.Module)
 endif()
 
+find_package(Python3 3.13 REQUIRED COMPONENTS Development.Module)
 Python3_add_library(nanoroute MODULE)
 target_compile_features(nanoroute PRIVATE cxx_std_23)
 set_target_properties(nanoroute PROPERTIES CXX_VISIBILITY_PRESET hidden)
