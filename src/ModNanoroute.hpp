@@ -17,4 +17,4 @@ extern PyModuleDef nanoroute_mod;
 
 } // namespace nanoroute
 
-#endif // NANOROUTE_MOD_NANOROUTE
+#endif // NANOROUTE_MODNANOROUTE_HPP

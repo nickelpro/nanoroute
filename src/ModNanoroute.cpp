@@ -33,6 +33,9 @@ void nrmod_free(void* mod) {
 int nrmod_exec(PyObject* mod) {
   auto state {static_cast<NanorouteState*>(PyModule_GetState(mod))};
 
+  if(PyModule_AddStringConstant(mod, "__version__", "2.0.4") == -1)
+    return -1;
+
   state->RouterType = reinterpret_cast<PyTypeObject*>(
       PyType_FromModuleAndSpec(mod, &router_spec, nullptr));
   if(!state->RouterType)
