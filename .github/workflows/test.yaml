@@ -19,13 +19,15 @@ jobs:
         with:
           python-version-file: pyproject.toml
 
+      - name: Setup Developer Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+
       - name: Build
         run: |
           python -m venv .venv
           .venv\Scripts\Activate.ps1
           python -m pip install --upgrade pip
-          pip install '.[test]' -v `
-            -C verbose=1
+          pip install '.[test]' -v
 
       - name: Test
         run: |
@@ -59,8 +61,7 @@ jobs:
           python -m venv .venv
           . .venv/bin/activate
           pip install --upgrade pip
-          pip install '.[test]' -v \
-            -C verbose=1=1
+          pip install '.[test]' -v
 
       - name: Test
         run: |
@@ -84,8 +85,7 @@ jobs:
           python -m venv .venv
           . .venv/bin/activate
           pip install --upgrade pip
-          pip install '.[test]' -v \
-            -C verbose=1
+          pip install '.[test]' -v
 
       - name: Test
         run: |
