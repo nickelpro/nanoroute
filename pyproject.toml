@@ -19,8 +19,9 @@ classifiers = [
 urls = { "Documentation" = "https://nanoroute.dev" }
 dependencies = []
 
-[project.optional-dependencies]
+[dependency-groups]
 test = ["pytest"]
+docs = ["sphinx"]
 
 [build-system]
 requires = ["py-build-cmake~=0.4.0"]

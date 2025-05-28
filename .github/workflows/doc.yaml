@@ -31,7 +31,7 @@ jobs:
 
       - name: Build Docs
         run: |
-          pip install sphinx
+          pip install --group docs
           sphinx-build docs _build
 
       - name: Add CNAME
