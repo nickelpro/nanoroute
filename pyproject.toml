@@ -4,14 +4,15 @@ version = "2.0.4"
 description = "Small, fast, HTTP URL router"
 readme = "ReadMe.md"
 requires-python = ">=3.13"
-license = { "file" = "License" }
+license = "CC0-1.0"
+license-files = ["License"]
 authors = [{ "name" = "Vito Gamberini", "email" = "vito@gamberini.email" }]
 keywords = ["WSGI"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
-  "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Operating System :: POSIX :: Linux",
   "Operating System :: Microsoft :: Windows",
   "Operating System :: MacOS",
@@ -24,7 +25,7 @@ test = ["pytest"]
 docs = ["sphinx", "sphinxext-opengraph"]
 
 [build-system]
-requires = ["py-build-cmake~=0.4.0"]
+requires = ["py-build-cmake~=0.5.0"]
 build-backend = "py_build_cmake.build"
 
 [tool.py-build-cmake.module]

@@ -22,18 +22,14 @@ jobs:
       - name: Setup Developer Prompt
         uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Build
-        run: |
-          python -m venv .venv
-          .venv\Scripts\Activate.ps1
-          python -m pip install --upgrade pip
-          pip install . -v
-
-      - name: Test
-        run: |
-          .venv\Scripts\Activate.ps1
-          pip install --group test
-          pytest test
+      - name: Build and Test
+        env:
+          CIBW_BUILD: "*win_amd64"
+          CIBW_SKIP: "cp*t*"
+          CIBW_BUILD_FRONTEND: build
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: "pytest {project}"
+        uses: pypa/cibuildwheel@v3.2
 
   build_macos:
     name: Build and Test on MacOS
@@ -53,46 +49,29 @@ jobs:
         with:
           python-version-file: pyproject.toml
 
-      - name: Build
+      - name: Build and Test
         env:
           MACOSX_DEPLOYMENT_TARGET: 13.3
           ARCHFLAGS: "-arch arm64"
-        run: |
-          python -m venv .venv
-          . .venv/bin/activate
-          pip install --upgrade pip
-          pip install . -v
-
-      - name: Test
-        run: |
-          . .venv/bin/activate
-          pip install --group test
-          pytest test
+          CIBW_BUILD_FRONTEND: build
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: "pytest {project}"
+        uses: pypa/cibuildwheel@v3.2
 
   build_linux:
     name: Build and Test on Linux
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: pyproject.toml
-
-      - name: Build
-        run: |
-          python -m venv .venv
-          . .venv/bin/activate
-          pip install --upgrade pip
-          pip install . -v
-
-      - name: Test
-        run: |
-          . .venv/bin/activate
-          pip install --group test
-          pytest test
+      - name: Build and Test
+        env:
+          CIBW_BUILD: "*manylinux*"
+          CIBW_BUILD_FRONTEND: build
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: "pytest {project}"
+        uses: pypa/cibuildwheel@v3.2
 
   build_docs:
     name: Build Docs

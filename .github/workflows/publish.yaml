@@ -20,8 +20,9 @@ jobs:
       - name: Build
         env:
           CIBW_BUILD: "*win_amd64"
+          CIBW_SKIP: "cp*t*"
           CIBW_BUILD_FRONTEND: build
-        uses: pypa/cibuildwheel@v2.22
+        uses: pypa/cibuildwheel@v3.2
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -44,10 +45,10 @@ jobs:
 
       - name: Build
         env:
-          CIBW_BUILD: "*mac*"
+          MACOSX_DEPLOYMENT_TARGET: 13.3
+          ARCHFLAGS: "-arch arm64"
           CIBW_BUILD_FRONTEND: build
-          MACOSX_DEPLOYMENT_TARGET: "13.3"
-        uses: pypa/cibuildwheel@v2.22
+        uses: pypa/cibuildwheel@v3.2
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -57,28 +58,22 @@ jobs:
 
   build_linux:
     name: Build wheels on Linux
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: pyproject.toml
-
       - name: Build
-        run: |
-          python -m pip install pipx
-          pipx run build
-          platform="$(ldd --version | awk '/ldd/{gsub(/\./, "_", $NF); print "manylinux_" $NF "_x86_64"}')"
-          pipx run wheel tags --remove --platform=${platform} dist/*linux_x86_64.whl
+        env:
+          CIBW_BUILD: "*manylinux*"
+          CIBW_BUILD_FRONTEND: build
+        uses: pypa/cibuildwheel@v3.2
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: wheel-linux
-          path: dist/*.whl
+          path: ./wheelhouse/*.whl
 
   build_sdist:
     name: Build sdist
