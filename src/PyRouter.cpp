@@ -1,9 +1,5 @@
 #include "PyRouter.hpp"
 
-// https://github.com/include-what-you-use/include-what-you-use/issues/1616
-// IWYU pragma: no_include <iterator>
-// IWYU pragma: no_include <ranges>
-
 #include <array>
 #include <cstddef>
 #include <exception>
@@ -244,10 +240,8 @@ PyObject* PyRouter::route(PyRouter* self, PyObject* const* args,
 }
 
 namespace {
-PyObject* make_cap_dict(
-    std::pair<std::vector<std::string>*, std::vector<std::string_view>*>&
-        caps) {
-  auto& [keys, vals] = caps;
+PyObject* make_cap_dict(std::vector<std::string>* keys,
+    std::vector<std::string_view>* vals) {
   auto dict {_PyDict_NewPresized(keys->size())};
   if(!dict)
     return nullptr;
@@ -313,12 +307,12 @@ PyObject* PyRouter::lookup(PyRouter* self, PyObject* const* args,
     return nullptr;
   }
 
-  auto dict {make_cap_dict(route_result->second)};
-  params_q.push(route_result->second.second);
+  auto dict {make_cap_dict(route_result->keys, route_result->vals)};
+  params_q.push(route_result->vals);
   if(!dict)
     return nullptr;
 
-  auto tuple {PyTuple_Pack(2, route_result->first, dict)};
+  auto tuple {PyTuple_Pack(2, route_result->pyo, dict)};
   Py_DECREF(dict);
   return tuple;
 }
@@ -377,8 +371,8 @@ PyObject* PyRouter::wsgi_app(PyRouter* self, PyObject* const* args,
     return nullptr;
   }
 
-  auto dict {make_cap_dict(route_result->second)};
-  params_q.push(route_result->second.second);
+  auto dict {make_cap_dict(route_result->keys, route_result->vals)};
+  params_q.push(route_result->vals);
   if(!dict)
     return nullptr;
 
@@ -387,8 +381,8 @@ PyObject* PyRouter::wsgi_app(PyRouter* self, PyObject* const* args,
   if(err)
     return nullptr;
 
-  return PyObject_CallFunctionObjArgs(route_result->first, ws_env,
-      start_response, nullptr);
+  return PyObject_CallFunctionObjArgs(route_result->pyo, ws_env, start_response,
+      nullptr);
 }
 
 namespace {

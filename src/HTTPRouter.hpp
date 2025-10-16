@@ -1,10 +1,6 @@
 #ifndef NANOROUTE_HTTPROUTER_HPP
 #define NANOROUTE_HTTPROUTER_HPP
 
-// https://github.com/include-what-you-use/include-what-you-use/issues/1616
-// IWYU pragma: no_include <iterator>
-// IWYU pragma: no_include <ranges>
-
 #include <array>
 #include <concepts>
 #include <cstddef>
@@ -15,7 +11,6 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
-#include <utility>
 #include <vector>
 
 #include <Python.h>
@@ -36,9 +31,13 @@ extern thread_local ParamQueue params_q;
 
 struct HTTPRouter {
 
-  using param_vals = std::vector<std::string_view>*;
   using param_keys = std::vector<std::string>*;
-  using val_ret = std::pair<PyObject*, std::pair<param_keys, param_vals>>;
+  using param_vals = std::vector<std::string_view>*;
+  struct val_ret {
+    PyObject* pyo;
+    param_keys keys;
+    param_vals vals;
+  };
 
   void reg_route(HTTPMethod meth, std::string_view route, PyObject* val);
   std::optional<val_ret> get_route(HTTPMethod meth, std::string_view route);

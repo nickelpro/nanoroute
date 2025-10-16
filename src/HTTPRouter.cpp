@@ -312,7 +312,7 @@ std::optional<HTTPRouter::val_ret> HTTPRouter::Node::get_value(Node* node,
       } // route.size() > node->prefix_.size()
 
       if(route == node->prefix_ && node->val_)
-        return val_ret {node->val_, {&node->keys_, params}};
+        return val_ret {node->val_, &node->keys_, params};
 
       params_q.push(params);
       return {};
@@ -327,7 +327,7 @@ std::optional<HTTPRouter::val_ret> HTTPRouter::Node::get_value(Node* node,
 
     params->push_back(route);
     if(node->val_)
-      return val_ret {node->val_, {&node->keys_, params}};
+      return val_ret {node->val_, &node->keys_, params};
 
     params_q.push(params);
     return {};
