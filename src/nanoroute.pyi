@@ -1,17 +1,17 @@
 from typing import Any, Callable, Iterable, TypeVar
 
-T = TypeVar('handle')
+handle = TypeVar('handle')
 
 
 class router:
   """Core class which represents a collection of HTTP verbs, routes, and
   associated Python object handles.
   """
-  def __init__() -> None:
+  def __init__(self) -> None:
     ...
 
   def route(self, methods: str | Iterable[str], route: str,
-            /) -> Callable[[T], T]:
+            /) -> Callable[[handle], handle]:
     """Base routing decorator
 
     :param methods: Either a string or iterable of strings representing the
@@ -31,7 +31,7 @@ class router:
     """
     ...
 
-  def get(self, route: str, /) -> Callable[[T], T]:
+  def get(self, route: str, /) -> Callable[[handle], handle]:
     """
     Convenience routing decorator, equivalent to ``route('GET', ...)``
 
@@ -41,7 +41,7 @@ class router:
     """
     ...
 
-  def post(self, route: str, /) -> Callable[[T], T]:
+  def post(self, route: str, /) -> Callable[[handle], handle]:
     """
     Convenience routing decorator, equivalent to ``route('POST', ...)``
 
@@ -51,7 +51,7 @@ class router:
     """
     ...
 
-  def put(self, route: str, /) -> Callable[[T], T]:
+  def put(self, route: str, /) -> Callable[[handle], handle]:
     """
     Convenience routing decorator, equivalent to ``route('PUT', ...)``
 
@@ -61,7 +61,7 @@ class router:
     """
     ...
 
-  def delete(self, route: str, /) -> Callable[[T], T]:
+  def delete(self, route: str, /) -> Callable[[handle], handle]:
     """
     Convenience routing decorator, equivalent to ``route('DELETE', ...)``
 
