@@ -39,7 +39,7 @@ minimum_version = "3.25"
 generator = "Ninja"
 config = "Release"
 build_type = "Release"
-build_args = ["-j"]
+install_args = ["--strip"]
 
 [tool.py-build-cmake.windows.cmake.options]
 "CMAKE_MSVC_RUNTIME_LIBRARY:STRING" = "MultiThreaded"

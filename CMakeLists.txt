@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.25)
 project(nanoroute LANGUAGES CXX VERSION 2.0.5)
 
 option(NANOROUTE_USE_IPO "Use interprocedural optimization if supported" ON)
-option(NANOROUTE_STRIP "Run system strip on compiled module" ON)
 option(NANOROUTE_GEN_IWYU_MAPPINGS "Generate Python mappings for IWYU" OFF)
 
 if(NANOROUTE_GEN_IWYU_MAPPINGS)
@@ -42,18 +41,6 @@ if(CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
   endif()
 elseif(CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
   target_compile_options(nanoroute PRIVATE /W3)
-endif()
-
-if(NANOROUTE_STRIP AND DEFINED CMAKE_STRIP AND NOT(CMAKE_BUILD_TYPE STREQUAL Debug))
-  if(APPLE)
-    add_custom_command(TARGET nanoroute POST_BUILD
-      COMMAND ${CMAKE_STRIP} -x $<TARGET_FILE:nanoroute>
-    )
-  else()
-    add_custom_command(TARGET nanoroute POST_BUILD
-      COMMAND ${CMAKE_STRIP} $<TARGET_FILE:nanoroute>
-    )
-  endif()
 endif()
 
 add_subdirectory(src)
