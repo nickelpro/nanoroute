@@ -9,7 +9,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(pythonMapGen)
 
 
-find_package(Python3 3.13 REQUIRED COMPONENTS Interpreter)
+find_package(Python3 3.13 REQUIRED COMPONENTS Interpreter Development.Module)
 
 execute_process(
   COMMAND ${Python3_EXECUTABLE} ${pythonmapgen_SOURCE_DIR}/iwyu-mapgen-cpython.py ${Python3_INCLUDE_DIRS}

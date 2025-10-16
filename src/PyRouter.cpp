@@ -2,9 +2,11 @@
 
 // https://github.com/include-what-you-use/include-what-you-use/issues/1616
 // IWYU pragma: no_include <iterator>
+// IWYU pragma: no_include <ranges>
 
 #include <array>
 #include <cstddef>
+#include <exception>
 #include <new>
 #include <optional>
 #include <string>
