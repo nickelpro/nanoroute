@@ -21,7 +21,7 @@ dependencies = []
 
 [dependency-groups]
 test = ["pytest"]
-docs = ["sphinx"]
+docs = ["sphinx", "sphinxext-opengraph"]
 
 [build-system]
 requires = ["py-build-cmake~=0.4.0"]

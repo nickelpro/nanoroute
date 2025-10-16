@@ -13,10 +13,15 @@ html_theme_options = {
     'fixed_sidebar': True,
     'github_banner': True,
 }
+html_logo = 'logo.svg'
+
+ogp_site_url = 'https://nanoroute.dev'
+ogp_image = 'logo.webp'
 
 autodoc_typehints = 'description'
 
 extensions = [
+    'sphinxext.opengraph',
     'sphinx.ext.autodoc'
 ]
 
