@@ -14,11 +14,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: pyproject.toml
-
       - name: Setup Developer Prompt
         uses: ilammy/msvc-dev-cmd@v1
 
@@ -43,11 +38,6 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: pyproject.toml
 
       - name: Build and Test
         env:
@@ -80,12 +70,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: pyproject.toml
-
       - name: Build Docs
         run: |
+          pip install --upgrade pip
           pip install --group docs
           sphinx-build docs _build
