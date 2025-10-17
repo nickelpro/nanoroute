@@ -20,7 +20,6 @@ jobs:
       - name: Build
         env:
           CIBW_BUILD: "*win_amd64"
-          CIBW_SKIP: "cp*t*"
           CIBW_BUILD_FRONTEND: build
         uses: pypa/cibuildwheel@v3.2
 
